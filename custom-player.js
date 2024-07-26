@@ -14,15 +14,17 @@ media.removeAttribute("controls");
 controls.style.visibility = "visible";
 
 play.addEventListener("click", playPauseMedia);
+stop.addEventListener("click", stopMedia);
+media.addEventListener("ended", stopMedia);
+rwd.addEventListener("click", mediaBackward);
+fwd.addEventListener("click", mediaForward);
+media.addEventListener("timeupdate", setTime);
 
 function playPauseMedia() {
-
   rwd.classList.remove("active");
   fwd.classList.remove("active");
   clearInterval(intervalRwd);
   clearInterval(intervalFwd);
-
-
   if (media.paused) {
     play.setAttribute("data-icon", "u");
     media.play();
@@ -32,25 +34,15 @@ function playPauseMedia() {
   }
 }
 
-stop.addEventListener("click", stopMedia);
-media.addEventListener("ended", stopMedia);
-
-
 function stopMedia() {
-  media.pause();
-  media.currentTime = 0;
-  play.setAttribute("data-icon", "P");
-
-
   rwd.classList.remove("active");
   fwd.classList.remove("active");
+  media.pause();
+  media.currentTime = 0;
   clearInterval(intervalRwd);
   clearInterval(intervalFwd);
-
+  play.setAttribute("data-icon", "P");
 }
-
-rwd.addEventListener("click", mediaBackward);
-fwd.addEventListener("click", mediaForward);
 
 let intervalFwd;
 let intervalRwd;
@@ -105,8 +97,6 @@ function windForward() {
   }
 }
 
-media.addEventListener("timeupdate", setTime);
-
 function setTime() {
   const minutes = Math.floor(media.currentTime / 60);
   const seconds = Math.floor(media.currentTime - minutes * 60);
@@ -121,5 +111,3 @@ function setTime() {
     timerWrapper.clientWidth * (media.currentTime / media.duration);
   timerBar.style.width = `${barLength}px`;
 }
-
-
